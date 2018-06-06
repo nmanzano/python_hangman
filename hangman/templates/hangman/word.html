@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+
+{% extends 'hangman/base.html' %}
+  {% block content %}
+
+    {% for post in posts %}
+      <h1>Player Name: {{ post.player }}</h1>
+      <h1>Player lives: {{ post.lives }}</h1>
+      <h1>Incorrect: {{ post.incorrect }}</h1>
+      <h1>Correct: {{ post.correct }}</h1>
+      <h1>Words : {{ post.wordsofar }}</h1>
+    {% endfor %}
+
+<form action="{% url 'letter_submission' %}" method="POST">
+    {% csrf_token %}
+    {{ letterForm.as_p }}
+    {% if gameView %}
+    <button type="subimt">Submit Letter</button>
+     {% endif %}
+</form>
+{% endblock %}
