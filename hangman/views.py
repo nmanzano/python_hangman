@@ -64,7 +64,7 @@ def letter_submission(request):
         return redirect('https://youtu.be/oHg5SJYRHA0?t=44')
     elif checkiflost == 0:
         Post.objects.all()[0].delete()
-        return redirect('https://youtu.be/p47fEXGabaY?t=12')
+        return redirect('https://youtu.be/nlYlNF30bVg?t=13')
 
     return redirect('game_view')
 
