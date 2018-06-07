@@ -8,7 +8,7 @@
       <h1>Player lives: {{ post.lives }}</h1>
       <h1>Incorrect: {{ post.incorrect }}</h1>
       <h1>Correct: {{ post.correct }}</h1>
-      <h1>Words : {{ post.wordsofar }}</h1>
+      <h1>Words : {{ post.seperate_lines }}</h1>
     {% endfor %}
 
 <form action="{% url 'letter_submission' %}" method="POST">

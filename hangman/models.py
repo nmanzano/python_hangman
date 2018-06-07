@@ -8,17 +8,12 @@ class Post(models.Model):
     correct = models.CharField(max_length=500)
     lives = models.PositiveSmallIntegerField(default=0)
     wordsofar = models.CharField(max_length=500, default='STRING')
-    nameLength = models.PositiveSmallIntegerField(default=0)
+    masterword = models.CharField(max_length=500, default='STRING')
     word = models.CharField(max_length=500, default='STRING')
     letter = models.CharField(max_length=500, default='STRING')
 
     def __str__(self):
         return self.player
-        return self.incorrect
-        return self.correct
-        return self.lives
-        return self.wordsofar
-        return self.nameLength
-        return self.word
-        return self.letter
-        return self.word_length
+
+    def seperate_lines(self):
+        return ' '.join(self.wordsofar)

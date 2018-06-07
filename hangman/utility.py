@@ -1,5 +1,6 @@
 from .models import Post
 from .forms import HomeForm, LetterForm
+from . import views
 
 
 class Game(object):
@@ -12,9 +13,12 @@ class Game(object):
 
     def setup_dashes(self):
         for letter in self.masterword:
-            self.wordsofar.append(' _ ')
+            self.wordsofar.append('_')
+        self.wordsofar = ''.join(self.wordsofar)
+        return self.wordsofar.replace(' ', '')
 
-        return self.wordsofar
+    def setword(self):
+        return self.word
 
     def lives_setup(self):
         return len(self.masterword)
@@ -34,52 +38,38 @@ class Game(object):
             lives = post.lives
             incorrect = post.incorrect
 
-        lives = lives - 1
+        lives -= 1
 
-        args = {
-            'lives': lives,
-            'choice': choice,
-            'incorrect': incorrect
-        }
         post.lives = lives
         post.incorrect = incorrect + ' ' + choice
         post.save()
-        return(args)
+        return(choice)
 
     def correct(self, choice):
         posts = Post.objects.all()
-        # cheese = posts.get('wordsofar', '')
-        # print(cheese, 'line 51')
-        print(type(posts), 'line 53')
-        print(Post.wordsofar, 'line 54')
         for post in posts:
-            print(post.wordsofar, 'Line 56')
             correct = post.correct
             wordsofar = post.wordsofar
-            print(wordsofar, 'Line 59')
-        print(type(wordsofar), 'line 60')
-        print(len(list(wordsofar)), 'Line 61')
+            masterword = post.masterword
 
         checkmark = self.fill_in_blanks(choice)
         print(checkmark, 'line 64')
-        args = {
-            'choice': choice,
-        }
+        post.wordsofar = checkmark
         post.correct = correct + ' ' + choice
         post.save()
-        return(args)
-        # if wordsofar == self.masterword:
-        #     print ('You Won!')
-        # else:
-        #     startgame()
+
+        return(checkmark)
 
     def fill_in_blanks(self, choice):
         posts = Post.objects.all()
         for post in posts:
+            # print (post.__dict__)
             wordsofar = post.wordsofar
-        print(wordsofar, 'line 80')
-        print(len(wordsofar), 'line 81')
-        # letter = [index for index, value in enumerate(self.masterword) if value == choice]
-        # for index in letter:
-        #     wordsofar[index] = self.masterword[index]
-        return wordsofar
+        wordsofar = list(wordsofar)
+        letter = [index for index, value in enumerate(self.masterword)
+                  if value == choice]
+        for index in letter:
+            wordsofar[index] = self.masterword[index]
+        if self.masterword == wordsofar:
+            return views.won()
+        return ''.join(wordsofar)

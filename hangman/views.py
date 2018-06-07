@@ -30,10 +30,10 @@ def game_view(request):
             post = formPlayer.save(commit=False)
             post.player = request.POST.get('Player', '')
             post.wordsofar = game.setup_dashes()
-            print(len(post.wordsofar), 'line 33')
             post.lives = game.lives_setup()
+            post.word = game.setword()
+            post.masterword = list(post.word)
             post.save()
-
     args = {
         'letterForm': letterForm,
         'gameView': gameView,
@@ -46,8 +46,33 @@ def letter_submission(request):
     posts = Post.objects.all()
     for post in posts:
         lives = post.lives
+        correct = (post.correct)
+        wordsofar = list(post.wordsofar)
+        masterword = post.masterword
 
     game = Game()
     letter = request.POST.get('Letter', '')
     choice = game.choose(letter)
+
+    checkposts = Post.objects.all()
+    for checkpost in checkposts:
+        checksifwon = checkpost.wordsofar
+        checkiflost = checkpost.lives
+
+    if checksifwon == 'WINNER!':
+        Post.objects.all()[0].delete()
+        return redirect('https://youtu.be/oHg5SJYRHA0?t=44')
+    elif checkiflost == 0:
+        Post.objects.all()[0].delete()
+        return redirect('https://youtu.be/p47fEXGabaY?t=12')
+
     return redirect('game_view')
+
+
+def won():
+    Post.objects.all()[0].delete()
+    return "WINNER!"
+
+
+def lost():
+    pass
